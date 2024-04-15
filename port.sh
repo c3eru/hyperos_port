@@ -69,19 +69,7 @@ else
     exit
 fi
 
-if [ ! -f "${portrom}" ] && [ "$(echo ${portrom} |grep http)" != "" ];then
-    blue "移植包为一个链接，正在尝试下载"  "Download link detected, start downloding.."
-    aria2c --max-download-limit=1024M --file-allocation=none -s10 -x10 -j10 ${portrom}
-    portrom=$(basename ${portrom} | sed 's/\?t.*//')
-    if [ ! -f "${portrom}" ];then
-        error "下载错误" "Download error!"
-    fi
-elif [ -f "${portrom}" ];then
-    green "移植包: ${portrom}" "PORTROM: ${portrom}"
-else
-    error "移植包参数错误" "PORTROM: Invalid parameter"
-    exit
-fi
+
 
 if [ "$(echo $baserom |grep miui_)" != "" ];then
     device_code=$(basename $baserom |cut -d '_' -f 2)
@@ -94,7 +82,7 @@ fi
 blue "正在检测ROM底包" "Validating BASEROM.."
 if unzip -l ${baserom} | grep -q "payload.bin"; then
     baserom_type="payload"
-    super_list="vendor mi_ext odm odm_dlkm system system_dlkm vendor_dlkm product product_dlkm system_ext"
+    super_list="vendor mi_ext odm odm_dlkm system system_dlkm vendor_dlkm product prouct_dlkm system_ext"
 elif unzip -l ${baserom} | grep -q "br$";then
     baserom_type="br"
     super_list="vendor mi_ext odm system product system_ext"
